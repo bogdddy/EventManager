@@ -1,0 +1,227 @@
+<%- include ../layouts/admin_header.ejs %>
+<%- include ../layouts/navbar.ejs %>
+<%- include ../layouts/alerts.ejs %>
+
+        <body id="page-top">
+
+            <div class="container">
+
+                <!-- create button -->
+                <div title="Afegir event" class="d-flex justify-content-center">
+                    <button type="button" class="btn btn-primary w-25" id="createEvent" data-toggle="modal" data-target="#formModal">
+                        Afegir <i class="fa fa-plus" aria-hidden="true"></i>
+                    </button>
+                </div>
+
+                <!-- event table -->
+                <div class="table-responsive">
+                    <table id="table" class="display table table-hover">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Nom</th>
+                                <th>Imatge</th>
+                                <th>Data</th>
+                                <th>Hora</th>
+                                <th>Recinte</th>
+                                <th>Preu</th>
+                                <th>Capacitat</th>
+                                <th>Accions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- print events -->
+                            <% for(const event of events){%>
+                                <tr>
+                                    <td class="align-middle">
+                                        <%= event.id %>
+                                    </td>
+                                    <td class="align-middle">
+                                        <%= event.name %>
+                                    </td>
+                                    <td class="align-middle w-25">
+                                        <div class="d-flex justify-content-center"><img src="/images/uploads/<%= event.image %>"
+                                                class="img-fluid img-thumbnail image"></div>
+                                    </td>
+                                    <td class="align-middle">
+                                        <%= event.date.split('-').reverse().join('/') %>
+                                    </td>
+                                    <td class="align-middle">
+                                        <%= event.time %>
+                                    </td>
+                                    <td class="align-middle">
+                                        <%= event.enclosure %>
+                                    </td>
+                                    <td class="align-middle">
+                                        <%= event.price %>
+                                    </td>
+                                    <td class="align-middle">
+                                        <%= event.capacity %>
+                                    </td>
+                                    <!-- event buttons -->
+                                    <td class="align-middle">
+                                        <div class="btn-group">
+
+                                            <!-- edit button -->
+                                            <button title="Editar event" type="button" class="btn btn-warning editEvent"
+                                                data-toggle="modal" data-target="#formModal"
+                                                data-eventid="<%= event.id %>">
+                                                <i class="fa fa-edit" aria-hidden="true"></i>
+                                            </button>
+
+                                            <!-- delete button -->
+                                            <button title="Eliminar event" type="button" class="btn btn-danger"
+                                                data-toggle="modal" data-target="#deleteModal"
+                                                onclick="$('#deleteModalForm').attr('action', '/events/delete/<%= event.id %>');">
+                                                <i class="fa fa-trash" aria-hidden="true"></i>
+                                            </button>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                                <% } %>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+
+            <!-- Delete Modal -->
+            <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            Segur que vols borrar aquest event?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-warning" data-dismiss="modal">No</button>
+
+                            <!-- delete form -->
+                            <form action="/events/delete/" method="post" id="deleteModalForm">
+                                <button type="submit" class="btn btn-danger">Si</button>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Event form Modal --> 
+            <div class="modal fade" id="formModal" tabindex="-1" role="dialog" aria-labelledby="formModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-xl" role="document">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="formModalLabel"></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-12 p-5">
+                                        <%- include ../events/form.ejs %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- image modal-->
+            <div class="modal fade" id="image_modal" tabindex="-1" role="dialog" aria-labelledby="image_modal"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content m-0 p-0">
+
+                        <img id="image_modal_img" src="" class="img-fluid" alt="img">
+
+                    </div>
+                </div>
+            </div>
+            <!-- end image modal -->
+
+            <%- include ../layouts/js.ejs %>
+
+
+            <!-- Custom JS -->
+            <script>
+                $(document).ready(() => {
+
+                    // using ejs to get all events
+                    const events = JSON.parse('<%- JSON.stringify(events) %>');
+
+                    // create event button
+                    $("#createEvent").click(() => {
+
+                        clearForm();
+                        $("#formModalLabel").text("Crear Event")
+                        $("#currentImage").hide();
+                        $("#imageOld").val("none")
+
+                        $("#eventForm").attr('action', '/events/store');
+                    })
+
+                    // edit event button 
+                    $(".editEvent").click((e) => {
+
+                        clearForm();
+                        $("#formModalLabel").text("Editar Event");
+                        $("#currentImage").show();
+
+                        let event_id = e.currentTarget.getAttribute('data-eventid');
+                        $("#eventForm").attr('action', `/events/edit/${event_id}`);
+
+                        fillEditForm(event_id);
+                    })
+
+                    // fill form with event values
+                    function fillEditForm(event_id) {
+
+                        // find event
+                        let event = events.find(event => event.id == event_id)
+
+                        $("#name").val(event.name);
+                        $("#enclosure").val(event.enclosure);
+                        $("#description").val(event.description);
+                        $("#imageOld").val(event.image)
+                        $("#date").val(event.date);
+                        $("#time").val(event.time);
+                        $("#price").val(event.price);
+                        $("#capacity").val(event.capacity);
+                        $("#currentImage").attr("href", "/images/" + event.image)
+
+                    }
+
+                    // clear modal form
+                    function clearForm() {
+                        $("#formModal :input").each(function(index) {
+                            if (index != $("#formModal :input").length - 1) {
+                                $(this).val("");
+                            }
+                        });
+                    }
+
+                    function reverseDate(date){
+                    }
+
+                    // show image modal
+                    $(".image").click((event) => {
+
+                        $('#image_modal').modal('show');
+                        $('#image_modal_img').attr("src", event.currentTarget.src);
+
+                    })
+                })
+            </script>
+        </body>
+
+</html>

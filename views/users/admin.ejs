@@ -1,0 +1,198 @@
+<%- include ../layouts/admin_header.ejs %>
+    <%- include ../layouts/navbar.ejs %>
+        <%- include ../layouts/alerts.ejs %>
+
+            <body id="page-top">
+
+                <div class="container">
+
+                <!-- create button -->
+                <div title="Afegir event" class="d-flex justify-content-center">
+                    <button type="button" class="btn btn-primary w-25" id="createUser" data-toggle="modal" data-target="#formModal">
+                        Afegir <i class="fa fa-plus" aria-hidden="true"></i>
+                    </button>
+                </div>
+                    <!-- user table -->
+                    <div class="table-responsive">
+                        <table id="table" class="display table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nom</th>
+                                    <th>Cognom</th>
+                                    <th>Mail</th>
+                                    <th>DNI</th>
+                                    <th>Codi Postal</th>
+                                    <th>Telefon</th>
+                                    <th>Accions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- print users -->
+                                <% for(const user of users){%>
+                                    <tr>
+                                        <td class="align-middle">
+                                            <%= user.id %>
+                                        </td>
+                                        <td class="align-middle">
+                                            <%= user.name %>
+                                        </td>
+                                        <td class="align-middle">
+                                            <%= user.surname %>
+                                        </td>
+                                        <td class="align-middle">
+                                            <%= user.mail %>
+                                        </td>
+                                        <td class="align-middle">
+                                            <%= user.DNI %>
+                                        </td>
+                                        <td class="align-middle">
+                                            <%= user.postal_code %>
+                                        </td>
+                                        <td class="align-middle">
+                                            <%= user.phone %>
+                                        </td>
+                                        <!-- user buttons -->
+                                        <td class="align-middle">
+                                            <div class="btn-group">
+
+                                                <!-- edit button -->
+                                                <button title="Editar user" type="button"
+                                                    class="btn btn-warning editUser" data-toggle="modal"
+                                                    data-target="#formModal" data-userid="<%= user.id %>">
+                                                    <i class="fa fa-edit" aria-hidden="true"></i>
+                                                </button>
+
+                                                <!-- delete button -->
+                                                <button title="Eliminar user" type="button" class="btn btn-danger"
+                                                    data-toggle="modal" data-target="#deleteModal"
+                                                    onclick="$('#deleteModalForm').attr('action', '/users/delete/<%= user.id %>');">
+                                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                                </button>
+
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+
+                <!-- Delete Modal -->
+                <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                Segur que vols borrar aquest user?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-warning" data-dismiss="modal">No</button>
+
+                                <!-- delete form -->
+                                <form action="/users/delete/" method="post" id="deleteModalForm">
+                                    <button type="submit" class="btn btn-danger">Si</button>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- user form Modal -->
+                <div class="modal fade" id="formModal" tabindex="-1" role="dialog" aria-labelledby="formModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-xl" role="document">
+                        <div class="modal-content">
+
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="formModalLabel"></h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
+                            <div class="modal-body">
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="col-12 p-5">
+                                            <%- include ../users/form.ejs %>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <%- include ../layouts/js.ejs %>
+
+
+                <!-- Custom JS -->
+                <script>
+                    $(document).ready(() => {
+
+                        // using ejs to get all users
+                        const users = JSON.parse('<%- JSON.stringify(users) %>');
+
+                        // create user button
+                        $("#createUser").click(() => {
+
+                            clearForm();
+                            $("#formModalLabel").text("Crear usuari");
+                            $("#mail").prop('disabled',false);
+                            $("#DNI").prop('disabled',false);
+
+
+                            $("#userForm").attr('action', '/users/store');
+                        })
+
+                        // edit user button 
+                        $(".editUser").click((e) => {
+
+                            clearForm();
+                            $("#formModalLabel").text("Editar usuari");
+                            $("#mail").prop('disabled',true);
+                            $("#DNI").prop('disabled',true);
+
+                            let user_id = e.currentTarget.getAttribute('data-userid');
+                            $("#userForm").attr('action', `/users/edit/${user_id}`);
+
+                            fillEditForm(user_id);
+                        })
+
+                        // fill form with user values
+                        function fillEditForm(user_id) {
+
+                            // find user
+                            let user = users.find(user => user.id == user_id)
+
+                            $("#name").val(user.name);
+                            $("#surname").val(user.surname);
+                            $("#mail").val(user.mail);
+                            $("#DNI").val(user.DNI)
+                            $("#user_type").val(user.user_type)
+                            $("#postal_code").val(user.postal_code);
+                            $("#phone").val(user.phone);
+
+                        }
+
+                        // clear modal form
+                        function clearForm() {
+                            $("#formModal :input").each(function (index) {
+                                if (index != $("#formModal :input").length - 1) {
+                                    $(this).val("");
+                                }
+                            });
+                        }
+
+                    })
+                </script>
+            </body>
+
+            </html>

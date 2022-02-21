@@ -1,0 +1,94 @@
+<%- include ../layouts/admin_header.ejs %>
+    <%- include ../layouts/navbar.ejs %>
+        <%- include ../layouts/alerts.ejs %>
+
+
+
+                <!-- create button -->
+                <div title="Afegir event" class="d-flex justify-content-center">
+                    <button type="button" class="btn btn-primary w-25" id="createEvent" data-toggle="modal" data-target="#formModal">
+                        Afegir <i class="fa fa-plus" aria-hidden="true"></i>
+                    </button>
+                </div>
+
+            <body id="page-top">
+
+                <div class="container">
+                    <!-- reservation table -->
+                    <div class="table-responsive">
+                        <table id="table" class="display table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Usuari</th>
+                                    <th>Event</th>
+                                    <th>Data</th>
+                                    <th>Tickets</th>
+                                    <th>Acció</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- print reservation -->
+                                <% for(const reservation of reservations){%>
+                                    <tr>
+                                        <td class="align-middle">
+                                            <%= reservation.id %>
+                                        </td>
+                                        <td class="align-middle">
+                                            <%= reservation.mail %>
+                                        </td>
+                                        <td class="align-middle">
+                                            <%= reservation.event %>
+                                        </td>
+                                        <td class="align-middle">
+                                            <%= reservation.date.split('-').reverse().join('/') %>
+                                        </td>
+                                        <td class="align-middle">
+                                            <%= reservation.number_tickets %>
+                                        </td>
+                                        <td>
+
+                                            <!-- delete button -->
+                                            <button title="Cancel·lar reserva" type="button" class="btn btn-danger"
+                                                data-toggle="modal" data-target="#deleteModal"
+                                                onclick="$('#deleteModalForm').attr('action', '/reservations/delete/<%= reservation.id %>');">
+                                                <i class="fa fa-trash" aria-hidden="true"></i>
+                                            </button>
+
+                                        </td>
+                                    </tr>
+                                    <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+
+                <!-- Delete Modal -->
+                <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                Segur que vols borrar aquesta reserva?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-warning" data-dismiss="modal">No</button>
+
+                                <!-- delete form -->
+                                <form action="/reservations/delete/" method="post" id="deleteModalForm">
+                                    <button type="submit" class="btn btn-danger">Si</button>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <%- include ../layouts/js.ejs %>
+
+        </body>
+
+    </html>

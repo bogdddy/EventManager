@@ -1,0 +1,122 @@
+<%- include ../layouts/public_header.ejs %>
+<%- include ../layouts/navbar.ejs %>
+<%- include ../layouts/alerts.ejs %>
+
+  <header class="page-section bg-primary text-white text-center" id="editor">
+    <div class="container d-flex align-items-center flex-column">
+      <h1 class="masthead-heading text-uppercase mb-0">El teu perfil</h1>
+      <div class="divider-custom divider-light">
+        <div class="divider-custom-line"></div>
+        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+        <div class="divider-custom-line"></div>
+
+      </div>
+      <div>
+        <!-- Register Form -->
+        <form method="post" action="/users/edit/<%= user.id %>">
+          <div class="row">
+            
+              <div class="col-md-6">
+                <input type="text" id="name" class="fadeIn second" name="name" placeholder="Nom"
+                  value="<%= user.name %>">
+                <input type="text" id="surname" class="fadeIn second" name="surname" placeholder="Cognom"
+                  value="<%= user.surname %>">
+                <input type="text" id="mail" class="fadeIn third" name="mail" placeholder="Correu"
+                  value="<%= user.mail %> " disabled>
+              </div>
+
+              <div class="col-md-6">
+                <input type="text" id="DNI" class="fadeIn third" name="DNI" placeholder="DNI" value="<%= user.DNI %>" disabled>
+                <input type="text" id="postal_code" class="fadeIn fifth" name="postal_code" placeholder="Codi Postal"
+                  value="<%= user.postal_code %>">
+                <input type="text" id="phone" class="fadeIn fifth" name="phone" placeholder="Telefon"
+                  value="<%= user.phone %>">
+              </div>
+
+            </div>
+          
+          <input type="submit" class="fadeIn sixth" value="actualitzar">
+        </form>
+      </div>
+    </div>
+  </header>
+
+  <section class="page-section" id="reserves">
+    <div class="container">
+      <!-- Contact Section Heading-->
+      <h1 class="page-section-heading text-center text-uppercase text-secondary mb-0">Les teves reserves</h1>
+      <!-- Icon Divider-->
+      <div class="divider-custom">
+        <div class="divider-custom-line"></div>
+        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+        <div class="divider-custom-line"></div>
+      </div>
+      <div>
+
+        <% if (reservations) { %>
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col">Nom</th>
+                <th scope="col">Data</th>
+                <th scope="col">Tickets</th>
+                <th scope="col">Cancel·lar</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              <% for(const reservation of reservations){%>
+                <tr>
+                  <td class="align-middle">
+                    <%= reservation.name %>
+                  </td>
+                  <td class="align-middle">
+                    <%= reservation.date.split('-').reverse().join('/') %>
+                  </td>
+                  <td class="align-middle">
+                    <%= reservation.number_tickets %>
+                  </td>
+                  <td class="align-middle">
+                    <!-- delete button -->
+                    <button title="Eliminar user" type="button" class="btn btn-danger" data-toggle="modal"
+                      data-target="#deleteModal"
+                      onclick="$('#deleteModalForm').attr('action', '/reservations/delete/<%= reservation.id %>');">
+                      <i class="fa fa-trash" aria-hidden="true"></i>
+                    </button>
+                  </td>
+                </tr>
+                <% } %>
+            </tbody>
+          </table>
+          <%}else{ %>
+            <div class="p-3 mb-2 bg-primary text-white text-center"><b>No tens reserves fetes</b></div>
+            <% } %>
+      </div>
+    </div>
+  </section>
+
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                Segur que vols cancel·lar aquesta reserva?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" data-dismiss="modal">No</button>
+
+                <!-- delete form -->
+                <form action="" method="post" id="deleteModalForm">
+                    <button type="submit" class="btn btn-danger">Si</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<%- include ../layouts/footer.ejs %>
+<%- include ../layouts/js.ejs %>

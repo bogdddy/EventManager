@@ -1,0 +1,50 @@
+<!-- form -->
+<form method="post" id="eventForm" action="" enctype="multipart/form-data">
+    <div class="row g-3">
+        <div class="form-group col-md-6 fadeIn first">
+            <label for="name">Nom</label>
+            <input id="name" class="form-control" type="text" name="name">
+        </div>
+
+        <div class="form-group col-md-6">
+            <label for="enclosure">Recinte</label>
+            <select id="enclosure" class="form-control" name="enclosure">
+                <% for(const enclosure of enclosures){%>
+                    <option value="<%= enclosure.id %>">
+                        <%= enclosure.name %>
+                    </option>
+                    <% } %>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <input id="description" class="form-control" type="text" name="description">
+        </div>
+        <div class="form-group">
+            <label for="image">Imatge</label>
+            <input id="imageOld" type="text" name="imageOld" hidden>
+            <input id="image" class="form-control-file" type="file" name="image">
+            <a id="currentImage" target="_blank">Imatge actual</a>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="date">Data</label>
+            <input id="date" class="form-control" type="date" name="date">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="time">Hora</label>
+            <input id="time" class="form-control" type="time" name="time">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="price">Preu</label>
+            <input id="price" class="form-control" type="number" min="0" name="price">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="capacity">Capacitat</label>
+            <input id="capacity" class="form-control" type="number" min="1" name="capacity">
+        </div>
+    </div>
+
+
+    <input class="btn btn-primary mt-3" type="submit">
+
+</form>

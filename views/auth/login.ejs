@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Manager</title>
+
+  <!-- boootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+  <!-- fontawesome -->
+  <script src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" crossorigin="anonymous"></script>
+
+
+  <!-- login css -->
+  <link rel="stylesheet" href="../../stylesheets/login.css" />
+
+  <!-- favicon -->
+  <link rel="icon" type="image/x-icon" href="..\..\images\fixed\favicon.ico" />
+
+</head>
+
+<body>
+  <% if (info !="" ) { %>
+    <div class="alert alert-info position-absolute top-0 w-100 text-center">
+      <%= info %>
+    </div>
+  <% } %>
+
+  <% if(typeof messages=='object' ) { %>
+    <% if (messages.error) { %>
+      <div class="alert alert-danger position-absolute top-0 w-100 text-center">
+        <%= messages.error %>
+      </div>
+    <% } %>
+  <% }%>
+
+  <div class="wrapper fadeInDown">
+    <div id="formContent">
+      <!-- Icon -->
+      <div class="fadeIn first">
+        <img src="../../images/fixed/avataaars.svg" id="icon" alt="User Icon" width="100vw"
+          height="100vw" />
+        <h1 class="text-secondary">Inicia Sessió</h1>
+      </div>
+
+      <!-- Login Form -->
+      <form method="post" action="/auth/login">
+        <input type="text" id="mail" class="fadeIn second" name="mail" placeholder="correu">
+        <input type="password" id="password" class="fadeIn third" name="password" placeholder="Contrasenya">
+        <input type="submit" class="fadeIn fourth" value="Inicia Sesió">
+      </form>
+
+      <!-- Go to register -->
+      <div id="formFooter">
+        <a class="underlineHover" href="/auth/register">No tens un compte? Crea't un.</a>
+      </div>
+
+    </div>
+  </div>
+
+</body>

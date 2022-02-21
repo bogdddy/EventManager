@@ -1,0 +1,323 @@
+<%- include ../layouts/public_header.ejs %>
+<%- include ../layouts/navbar.ejs %>
+
+        <header class="page-section bg-primary text-white text-center" id="carousel">
+            <div class="container d-flex align-items-center flex-column">
+                <h1 class="masthead-heading text-uppercase mb-0">Última oportunitat</h1>
+                <div class="divider-custom divider-light">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+                <!-- Slider main container -->
+                <div class="container-fluid">
+                    <div class="row d-flex justify-content-center">
+                        <div class="col-7">
+
+                            <div class="swiper">
+                                <!-- Additional required wrapper -->
+                                <div class="swiper-wrapper">
+                                    <!-- Slides -->
+                                    <% for (var i=3; i> 0; i--){ %>
+                                        <div class="swiper-slide">
+                                            <a href="./events/show/<%= events[events.length-i].id%>">
+                                            <div class="d-flex justify-content-center align-items-center h-75 flex-column">
+                                                    <img src="/images/uploads/<%= events[events.length-i].image %>"
+                                                    class="rounded mh-100" alt="">
+                                                </div>
+                                            </a>
+                                            <h4 class="text-light"><%= events[events.length-i].name %></h4>
+                                        </div>
+                                    <% } %>
+
+                                </div>
+
+                                <!-- navigation buttons -->
+                                <div class="swiper-button-prev"></div>
+                                <div class="swiper-button-next"></div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </header>
+
+        <section class="page-section portfolio " id="events">
+            <div class="container">
+                
+                <!-- EVENTS-->
+                <h1 class="page-section-heading text-center text-uppercase text-secondary mb-0">Events</h1>
+                
+                <div class="divider-custom">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+
+                <div>
+
+
+                    <!-- filters -->
+                    <div class="row d-flex justify-content-between border bg-light">
+                        <div class="col-md-3 col-sm-5 form-group p-3">
+                            <label for="formGroupExampleInput">Data</label>
+                            <input id="date_filter" class="form-control" name="event_filter[]" type="date">
+                            
+                        </div>
+                        <div class="col-md-3 col-sm-5 form-group p-3">
+                            <label for="formGroupExampleInput">Preu</label>
+                            <input id="price_filter" class="form-control" name="event_filter[]" type="number" min="0">
+                        </div>
+                        <div class="col-md-3 p-3 text-center">
+                            <h5>Ordenar per:</h5>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="orderby" id="radios1" value="date" checked>
+                                <label class="form-check-label" for="radios1">
+                                    Data
+                                </label>
+                                </div>
+                                <div class="form-check">
+                                <input class="form-check-input" type="radio" name="orderby" id="radios2" value="price">
+                                <label class="form-check-label" for="radios2">
+                                    Preu
+                                </label>
+                                </div>
+                        </div>
+                        <div class="col-md-3 d-flex p-3">
+                            <input id="search_filter" class="w-100 form-control border" name="event_filter[]" type="text" placeholder="Cercar..">
+                            
+                        </div>
+                    </div>
+                    
+                    <!-- all events -->
+                    <div id="event_list" class="row justify-content-center mt-3">
+
+                        <% for(const event of events){%>
+                            <div class="col-md-6 col-lg-4 mb-5">
+                                <a href="./events/show/<%= event.id%>">
+                                    <div class="portfolio-item mx-auto h-100 d-flex justify-content-between flex-column">
+                                        <div
+                                            class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
+                                            <div class="portfolio-item-caption-content text-center text-white"><i
+                                                    class="fas fa-plus fa-3x"></i></div>
+                                        </div>
+                                        <img class="img-fluid" src="/images/uploads/<%= event.image %>" alt="<%- event.name %>" />
+                                        <h3 class="masthead-subheading font-weight-light mb-0 text-center">
+                                            <%- event.name %>
+                                        </h3>
+
+                                    </div>
+                                </a>
+                            </div>
+                            <% } %>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="page-section bg-primary text-white mb-0" id="about">
+            <div class="container">
+
+                <!-- About Section Heading-->
+                <h1 class="page-section-heading text-center text-uppercase text-white">Sobre nosaltres</h1>
+                <div class="divider-custom divider-light">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+
+                <!-- About Section Content-->
+                <div class="row">
+                    <div class="col-lg-4 ms-auto">
+                        <p class="lead">Reus és un municipi i una ciutat de Catalunya, la capital de la comarca del Baix
+                            Camp, situat a l'oest del Camp de Tarragona i
+                            a uns 10 km de la mar Mediterrània. La seva població és de 104.373 habitants (2019).</p>
+                    </div>
+                    <div class="col-lg-4 me-auto">
+                        <p class="lead">Es concentren en una àrea de 52,8 km² i que a part de la ciutat també inclouen
+                            els antics termes del Burgar i MascalbóEl
+                            municipi engloba una quarta part de la població de l'àrea metropolitana de Tarragona-Reus,
+                            que engloba un total de fins a
+                            456.042 habitants.</p>
+                    </div>
+                </div>
+                <!-- About Section Button-->
+                <div class="text-center mt-4">
+                    <a class="btn btn-xl btn-outline-light" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
+                        <i class="fas fa-info me-2"></i>
+                        Coneix més
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="page-section" id="contact">
+            <div class="container">
+
+                <h1 class="page-section-heading text-center text-uppercase text-secondary mb-0">Contacta'ns</h1>
+                <div class="divider-custom">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+
+                <!-- Contact Section Form-->
+                <div class="row justify-content-center">
+                    <div class="col-lg-8 col-xl-7">
+                        <form id="contactForm" data-sb-form-api-token="API_TOKEN">
+                            <!-- Name input-->
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="name" type="text" placeholder="Enter your name..."
+                                    data-sb-validations="required" />
+                                <label for="name">Nom complet</label>
+                                <div class="invalid-feedback" data-sb-feedback="name:required">El nom es obligatori.
+                                </div>
+                            </div>
+                            <!-- Email address input-->
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="email" type="email" placeholder="name@example.com"
+                                    data-sb-validations="required,email" />
+                                <label for="email">Correu electrònic</label>
+                                <div class="invalid-feedback" data-sb-feedback="email:required">El correu electrònic es
+                                    obligatori.</div>
+                                <div class="invalid-feedback" data-sb-feedback="email:email">Aquest email no es valid.
+                                </div>
+                            </div>
+                            <!-- Phone number input-->
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="phone" type="tel" placeholder="(123) 456-7890"
+                                    data-sb-validations="required" />
+                                <label for="phone">Telefon mòbil</label>
+                                <div class="invalid-feedback" data-sb-feedback="phone:required">El telefon mòbil es
+                                    obligatori.</div>
+                            </div>
+                            <!-- Message input-->
+                            <div class="form-floating mb-3">
+                                <textarea class="form-control" id="message" type="text"
+                                    placeholder="Enter your message here..." style="height: 10rem"
+                                    data-sb-validations="required"></textarea>
+                                <label for="message">El teu misatge</label>
+                                <div class="invalid-feedback" data-sb-feedback="message:required">A message is required.
+                                </div>
+                            </div>
+                            <!-- Submit success message-->
+                            <div class="d-none" id="submitSuccessMessage">
+                                <div class="text-center mb-3">
+                                    <div class="fw-bolder">Formulari enviat correctanent.</div>
+                                </div>
+                            </div>
+                            <!-- Submit error message-->
+                            <div class="d-none" id="submitErrorMessage">
+                                <div class="text-center text-danger mb-3">Error enviant el misatge!</div>
+                            </div>
+                            <!-- Submit Button-->
+                            <button class="btn btn-primary btn-xl" id="submitButton" type="submit">Envia</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+    <%- include ../layouts/footer.ejs %>
+    <%- include ../layouts/js.ejs %>
+
+<script>
+
+    // caroussel options 
+    const swiper = new Swiper('.swiper', {
+       
+        direction: 'horizontal',
+        loop: true,
+
+        autoplay: {
+            delay: 5000,
+        },
+
+        // pagination
+        pagination: {
+            el: '.swiper-pagination',
+        },
+
+        // Navigation arrows
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+
+    });
+</script>
+<script>
+    $("document").ready(() =>{
+
+        // using ejs to get all events
+        const events = JSON.parse('<%- JSON.stringify(events) %>');
+
+        // add event listener 
+        $("input[name^=event_filter], input[name^=orderby]").change(filterEvents);
+
+        function filterEvents() {
+
+            let events_filter = events;
+
+            // get filter values
+            let date = $("#date_filter").val();
+            let price = $("#price_filter").val();
+            let search = $("#search_filter").val();
+            let orderBy = $('input[name="orderby"]:checked').val();
+
+            // filter params
+            if (date != "")
+                events_filter = events_filter.filter(event => Date.parse(event.date) > Date.parse(date));
+            
+            if (price != "")
+                events_filter = events_filter.filter(event => event.price <= price );
+            
+            if (search != "")
+                events_filter = events_filter.filter(event => event.name.includes(search) || event.description.includes(search));
+            
+            // order by
+            if (orderBy == "date")
+                events_filter.sort((a, b) => Date.parse(a.date) - Date.parse(b.date))
+            else if ( orderBy == "price")
+                events_filter.sort((a, b) => a.price - b.price)
+
+            // print events
+            if (events_filter.length == 0)
+                $("#event_list").html('<p class="text-muted text-center">No hi ha events que coincideixin amb els paràmetres de búsqueda<p>')
+            else{
+
+                let events_filtered =""
+
+                for (const event of events_filter){
+                    events_filtered += `
+                        <div class="col-md-6 col-lg-4 mb-5">
+                            <a href="./events/show/${event.id}">
+                                <div class="portfolio-item mx-auto h-100 d-flex justify-content-between flex-column">
+                                    <div
+                                        class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
+                                        <div class="portfolio-item-caption-content text-center text-white"><i
+                                                class="fas fa-plus fa-3x"></i></div>
+                                    </div>
+                                    <img class="img-fluid" src="/images/uploads/${event.image}" alt="${event.name}" />
+                                    <h3 class="masthead-subheading font-weight-light mb-0 text-center">
+                                        ${event.name}
+                                    </h3>
+
+                                </div>
+                            </a>
+                        </div>
+                    `
+                }
+
+                $("#event_list").html(events_filtered)
+            }
+            
+        }
+        
+
+    })
+</script>

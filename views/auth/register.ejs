@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Manager</title>
+
+  <!-- boootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+  <!-- fontawesome -->
+  <script src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" crossorigin="anonymous"></script>
+
+
+  <!-- register css -->
+  <link rel="stylesheet" href="../../stylesheets/register.css" />
+
+  <!-- favicon -->
+  <link rel="icon" type="image/x-icon" href="..\..\images\fixed\favicon.ico" />
+
+</head>
+
+<body>
+  <%- include ../layouts/alerts.ejs %>
+
+  <div class="wrapper fadeInDown">
+      <div id="formContent">
+        <!-- Tabs Titles -->
+    
+        <!-- Icon -->
+        <div class="fadeIn first">
+          <img src="../../images/fixed/avataaars.svg" id="icon" alt="User Icon" width="100vw" height="100vw"/>
+          <h1 class="text-secondary">Registrat</h1>
+          
+        </div>
+        <!-- Register Form -->
+        <form  method="post" action="/auth/register">
+          <input type="text" id="name" class="fadeIn second" name="name" placeholder="Nom" >
+          <input type="text" id="surname" class="fadeIn second" name="surname" placeholder="Cognom">
+          <input type="text" id="mail" class="fadeIn third" name="mail" placeholder="Correu" >
+          <input type="text" id="DNI" class="fadeIn third" name="DNI" placeholder="DNI" >
+          <input type="password" id="password" class="fadeIn fourth" name="password" placeholder="Contrasenya" >
+          <input type="password" id="password2" class="fadeIn fourth" name="passwordrpt" placeholder="Repetir Contrasenya">
+          <input type="text" id="postal_code" class="fadeIn fifth" name="postal_code" placeholder="Codi Postal" >
+          <input type="text" id="phone" class="fadeIn fifth" name="phone" placeholder="Telefon" >
+          <input type="submit" class="fadeIn sixth" value="Registra't">
+        </form>
+  
+        <!-- Go to login -->
+        <div id="formFooter">
+          <a class="underlineHover" href="/auth/login">Ja tens un compte? Inicia sessió.</a>
+        </div>
+      </div>
+    </div>
+</body>
+
+

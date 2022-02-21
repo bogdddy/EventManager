@@ -1,0 +1,167 @@
+<%- include ../layouts/admin_header.ejs %>
+<%- include ../layouts/navbar.ejs %>
+<%- include ../layouts/alerts.ejs %>
+
+            <div>
+                <section class="page-section bg-primary text-white mb-0" id="event">
+                    <div class="container">
+                        <!-- About Section Heading -->
+                        <h1 class="page-section-heading text-center text-uppercase text-white">
+                            <%= event.name %>
+                        </h1>
+                        <!-- Icon Divider -->
+                        <div class="divider-custom divider-light">
+                            <div class="divider-custom-line"></div>
+                            <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                            <div class="divider-custom-line"></div>
+                        </div>
+                        <!-- info -->
+                        <div class="row">
+                            <div class="col-lg-4 ms-auto d-flex justify-content-center">
+                                <img class="w-75" src="/images/uploads/<%= event.image %>"></img>
+                            </div>
+                            <div class="col-lg-4 me-auto d-flex align-items-center justify-content-center flex-column">
+                                <p class="lead"><b>Data:</b>
+                                    <%= event.date.split('-').reverse().join('/') %>
+                                </p>
+                                <p class="lead"><b>Hora:</b>
+                                    <%= event.time %>
+                                </p>
+                                <p class="lead"><b>Local:</b>
+                                    <%= event.enclosure_name %>
+                                </p>
+                                <p class="lead"><b>Addreça:</b>
+                                    <%= event.address %>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center mt-3">
+                            <p class="lead"><b>Descripció :</b>
+                                <%= event.description %>
+                            </p>
+                        </div>
+                        <div class="text-center mt-3">
+                            <p class="lead"><b>Preu:</b>
+                                <% if (event.price == 0) { %>
+                                    Gratuït
+                                <% } else { %>
+                                    <%= event.price %> €
+                                <% } %>
+                            </p>
+                            <a class="btn btn-xl btn-outline-light" title="realitzar reserva" type="button"
+                                class="btn btn-success" data-toggle="modal" data-target="#reservationModal">
+                                <i class="fas fa-shopping-cart"></i>
+                                Realitzar reserva
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
+
+                <article class="blog-post ">
+                    <!-- Reservation Modal -->
+                    <div class="modal fade" id="reservationModal" tabindex="-1" role="dialog"
+                        aria-labelledby="reservationModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-md" role="document">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <p>Realitzar reserva:</p>
+
+                                    <!-- reservation form -->
+                                    <form action="/reservations/store/<%= event.id %>" method="post"
+                                        id="deleteModalForm">
+                                        <div>
+                                            <label class="d-inline pr-4 col-4" for="number_tickets">Número d'entrades</label>
+                                            <select class="d-inline col-4" id="number_tickets" class="form-control" name="number_tickets">
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                            </select>
+                                        </div>
+
+
+                                        <button type="submit" class="btn btn-primary mt-1">Reservar</button>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- leave a comment -->
+                    <section class="page-section" id="comment">
+                        <div class="container">
+                            <!-- Contact Section Heading-->
+                            <h1 class="page-section-heading text-center text-uppercase text-secondary mb-0">
+                                Comentaris</h1>
+                            <!-- Icon Divider-->
+                            <div class="divider-custom">
+                                <div class="divider-custom-line"></div>
+                                <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                                <div class="divider-custom-line"></div>
+                            </div>
+                            <!-- Contact Section Form-->
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8 col-xl-7">
+                                    <form action="/comments/store/<%= event.id %>" method="POST">
+                                        <textarea class="form-control" id="comment" name="comment" type="text"
+                                            placeholder="Enter your message here..." style="height: 10rem"
+                                            data-sb-validations="required"></textarea>
+                                        <div class="invalid-feedback" data-sb-feedback="message:required">A message
+                                            is
+                                            required.
+                                        </div>
+                                        <div class="d-flex justify-content-center mt-2">
+                                            <button class="btn btn-primary btn-xl" id="submitButton"
+                                                type="submit">Envia</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+
+                    <!-- Comments  -->
+                    <section class="page-section bg-primary text-white mb-0" id="event">
+                        <div class="container">
+                            <% for(const comment of comments){ %>
+
+                                <div class="card p-3 mt-3">
+                                    <div class="d-flex justify-content-between align-items-center flex-row">
+                                        <div class="user d-flex flex-row align-items-center">
+                                            <span>
+                                                <small class="font-weight-bold text-primary">
+                                                    <%= comment.name %>
+                                                </small>
+                                                <i class="fas fa-user text-primary"></i>
+                                                <small class="font-weight-bold text-primary">
+                                                    <%= comment.date.split('-').reverse().join('/') %>
+                                                </small>
+                                                <small class="font-weight-bold text-dark">
+                                                    <%= comment.comment %>
+                                                </small>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="action d-flex justify-content-between mt-2 align-items-center">
+                                        <div class="reply px-4">
+                                            <a><small class="text-primary">Reply</small></a>
+                                            <span class="dots"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% } %>
+                        </div>
+                    </section>
+                </article>
+            </div>
+
+            <%- include ../layouts/footer.ejs %>
+            <%- include ../layouts/js.ejs %>

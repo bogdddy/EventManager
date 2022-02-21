@@ -1,0 +1,179 @@
+<%- include ../layouts/admin_header.ejs %>
+<%- include ../layouts/navbar.ejs %>
+
+        <body id="page-top">
+
+            <div class="container">
+                <%- include ../layouts/alerts.ejs %>
+
+
+                <!-- create button -->
+                <div title="Afegir event" class="d-flex justify-content-center">
+                    <button type="button" class="btn btn-primary w-25" id="createenclosure" data-toggle="modal" data-target="#formModal">
+                        Afegir <i class="fa fa-plus" aria-hidden="true"></i>
+                    </button>
+                </div>
+
+                    <!-- enclosure table -->
+                    <div class="table-responsive">
+                        <table id="enclosuresTable" class="display table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nom</th>
+                                    <th>Adreça</th>
+                                    <th>Superfície</th>
+                                    <th>Accions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- print enclosures -->
+                                <% for(const enclosure of enclosures){%>
+                                    <tr>
+                                        <td class="align-middle">
+                                            <%= enclosure.id %>
+                                        </td>
+                                        <td class="align-middle">
+                                            <%= enclosure.name %>
+                                        </td>
+                                        <td class="align-middle">
+                                            <%= enclosure.address %>
+                                        </td>
+                                        <td class="align-middle">
+                                            <%= enclosure.surface %> m <sup>2</sup>
+                                        </td>
+
+                                        <!-- enclosure buttons -->
+                                        <td class="align-middle">
+                                            <div class="btn-group">
+
+                                                <!-- edit button -->
+                                                <button title="Editar enclosure" type="button"
+                                                    class="btn btn-warning editenclosure" data-toggle="modal"
+                                                    data-target="#formModal" data-enclosureid="<%= enclosure.id %>">
+                                                    <i class="fa fa-edit" aria-hidden="true"></i>
+                                                </button>
+
+                                                <!-- delete button -->
+                                                <button title="Eliminar enclosure" type="button" class="btn btn-danger"
+                                                    data-toggle="modal" data-target="#deleteModal"
+                                                    onclick="$('#deleteModalForm').attr('action', '/enclosures/delete/<%= enclosure.id %>');">
+                                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                                </button>
+
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+
+            </div>
+
+
+            <!-- Delete Modal -->
+            <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            Segur que vols borrar aquest enclosure?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-warning" data-dismiss="modal">No</button>
+
+                            <!-- delete form -->
+                            <form action="/enclosures/delete/" method="post" id="deleteModalForm">
+                                <button type="submit" class="btn btn-danger">Si</button>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- enclosure form Modal -->
+            <div class="modal fade" id="formModal" tabindex="-1" role="dialog" aria-labelledby="formModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-xl" role="document">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="formModalLabel">Create enclosure</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-12 p-5">
+                                        <%- include ../enclosures/form.ejs %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <%- include ../layouts/js.ejs %>
+
+            <!-- Custom JS -->
+            <script>
+                $(document).ready(() => {
+
+                    // using ejs to get all enclosures
+                    const enclosures = JSON.parse('<%- JSON.stringify(enclosures) %>');
+
+                    // create enclosure button
+                    $("#createenclosure").click(() => {
+
+                        clearForm();
+                        $("#formModalLabel").val("Crear Recinte")
+
+                        $("#enclosureForm").attr('action', '/enclosures/store');
+                    })
+
+                    // edit enclosure button 
+                    $(".editenclosure").click((e) => {
+
+                        clearForm();
+                        $("#formModalLabel").val("Editar Recinte");
+
+                        let enclosure_id = e.currentTarget.getAttribute('data-enclosureid');
+                        $("#enclosureForm").attr('action', `/enclosures/edit/${enclosure_id}`);
+
+                        fillEditForm(enclosure_id);
+                    })
+
+                    // fill form with enclosure values
+                    function fillEditForm(enclosure_id) {
+
+                        // find enclosure
+                        let enclosure = enclosures.find(enclosure => enclosure.id == enclosure_id)
+
+                        $("#name").val(enclosure.name);
+                        $("#address").val(enclosure.address);
+                        $("#surface").val(enclosure.surface);
+
+                    }
+
+                    // clear modal form
+                    function clearForm() {
+                        $("#formModal :input").each(function (index) {
+                            if (index != $("#formModal :input").length - 1) {
+                                $(this).val("");
+                            }
+                        });
+                    }
+
+                })
+            </script>
+        </body>
+
+        </html>

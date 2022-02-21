@@ -1,0 +1,88 @@
+<nav class="navbar navbar-expand-md">
+	<div class="container">
+
+		<a class="navbar-brand" href="/">
+			<picture>
+				<source srcset="../../images/fixed/logo.jpg" media="(min-width: 1000px)">
+				<img src="../../images/fixed/biglogo.jpg" alt="MDN">
+			</picture>
+		</a>
+
+		<!-- Links -->
+		<button class="navbar-toggler text-uppercase font-weight-bold bg-primary text-white rounded" type="button"
+			data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+			aria-label="Toggle navigation">
+			Menu
+			<i class="fas fa-bars"></i>
+		</button>
+
+		<div class="collapse navbar-collapse" id="navbarNav">
+			<ul class="navbar-nav ms-auto">
+
+				<!-- login and register -->
+				<% if (!user) { %>
+				<li class="nav-item mx-0 mx-lg-1">
+					<a class="nav-link py-3 px-0 px-lg-3 rounded" href="/auth/register">
+						<button class="btn btn-outline-primary">Registra't</button>
+					</a>
+				</li>
+				<li class="nav-item mx-0 mx-lg-1">
+					<a class="nav-link py-3 px-0 px-lg-3 rounded" href="/auth/login">
+						<button class="btn btn-outline-primary">Logueja't</button>
+					</a>
+				</li>
+				<% } %>
+
+				<li class="nav-item mx-0 mx-lg-1">
+					<a class="nav-link py-3 px-0 px-lg-3 rounded" href="/events">
+						<button class="btn btn-outline-primary"><i class="fa-solid fa-house"></i></button>
+					</a>
+				</li>
+
+				<% if (user) { %>
+					<% if (user.user_type !=3) { %>
+
+						<!-- Admin views -->
+						<li class="nav-item mx-5 mx-lg-3">
+			
+							<button type="button" class="btn btn-outline-dark my-3 px-3 rounded" data-toggle="dropdown"
+								aria-haspopup="true" aria-expanded="false">Admin <i
+									class="fa-solid fa-lock"></i></button>
+							<div class="dropdown-menu">
+								<a class="dropdown-item" href="/events/admin">Events</a>
+								<a class="dropdown-item" href="/enclosures/admin">Recintes</a>
+
+								<% if (user.user_type==1) { %>
+									<a class="dropdown-item" href="/reservations/admin">Reserves</a>
+									<a class="dropdown-item" href="/users/admin">Usuaris</a>
+									<% } %>
+
+							</div>
+
+						</li>
+						<% } %>
+
+						<!-- Profile and logout -->
+						<li class="nav-item mx-3">
+
+							<button class="btn bg-primary my-3 px-lg-3 rounded" data-toggle="dropdown" aria-haspopup="true"
+								aria-expanded="false">
+								<i class="fa fa-user"></i>
+							</button>
+							<div class="dropdown-menu">
+								<a class="dropdown-item" href="/users/profile">
+									<button type="submit" class="btn btn-primary">Perfil <i class="fa-solid fa-id-card"></i></button>
+								</a>
+								<a class="dropdown-item" href="#">
+									<form action="/auth/logout?_method=DELETE" method="post">
+										<button type="submit" class="btn btn-warning">Log Out <i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+									</form>
+								</a>
+							</div>
+						</li>
+					<% } %>
+			</ul>
+		</div>
+	</div>
+
+</nav>
